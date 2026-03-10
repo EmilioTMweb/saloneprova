@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Real Hair Yeah | Man & Woman</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@900&family=Inter:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        h1, h2 { font-family: 'Montserrat', sans-serif; font-weight: 900; }
+        body { font-family: 'Inter', sans-serif; }
+        .text-stroke { -webkit-text-stroke: 1px #facc15; color: transparent; }
+    </style>
+</head>
+<body class="bg-black text-white">
+
+    <nav class="p-6 flex justify-between items-center fixed w-full bg-black/90 backdrop-blur-md z-50 border-b border-white/10">
+        <div class="flex items-center gap-4">
+            <div class="text-2xl italic font-black uppercase tracking-tighter">Real Hair <span class="text-yellow-400">Yeah.</span></div>
+            <span class="text-[9px] text-zinc-500 font-bold uppercase tracking-[0.2em] hidden md:inline-block border-l border-white/20 pl-4">Aperti Lun-Sab <br> <span class="text-red-500">Domenica Chiusi</span></span>
+        </div>
+        <div class="flex gap-4 items-center">
+            <a href="servizi.html" class="text-[10px] font-bold uppercase tracking-widest hover:text-yellow-400 transition">Listino</a>
+            <a href="prenota.html" class="bg-yellow-400 text-black px-6 py-2 font-black uppercase text-xs hover:invert transition">Prenota</a>
+        </div>
+    </nav>
+
+    <section class="relative min-h-screen flex items-center overflow-hidden border-b border-zinc-800">
+        <div class="absolute inset-0 z-0">
+            <img src="https://images.unsplash.com/photo-1503951914875-452162b0f3f1?auto=format&fit=crop&q=80&w=1600" class="w-full h-full object-cover opacity-60">
+        </div>
+        <div class="relative z-10 p-10 md:p-20">
+            <h2 class="text-7xl md:text-9xl uppercase leading-none mb-4">Man<br><span class="text-stroke">Cutz</span></h2>
+            <p class="max-w-md text-zinc-300 mb-8 text-lg font-light">Tagli old school, sfumature moderne e trattamento barba con panno caldo.</p>
+            <a href="servizi.html" class="border-2 border-yellow-400 text-yellow-400 px-8 py-4 font-black uppercase hover:bg-yellow-400 hover:text-black transition inline-block">Scopri i Servizi</a>
+        </div>
+    </section>
+
+    <section class="relative min-h-screen flex items-center overflow-hidden">
+        <div class="absolute inset-0 z-0">
+            <img src="https://images.unsplash.com/photo-1560066984-138dadb4c035?auto=format&fit=crop&q=80&w=1600" class="w-full h-full object-cover opacity-60">
+        </div>
+        <div class="relative z-10 p-10 md:p-20 text-right w-full flex flex-col items-end">
+            <h2 class="text-7xl md:text-9xl uppercase leading-none mb-4 text-yellow-400">Woman<br><span class="text-stroke">Salon</span></h2>
+            <p class="max-w-md text-zinc-300 mb-8 text-lg font-light">Colori vibranti, pieghe Red Carpet e trattamenti alla cheratina per capelli che non passano inosservati.</p>
+            <a href="servizi.html" class="bg-yellow-400 text-black px-8 py-4 font-black uppercase hover:bg-white transition inline-block">Scopri i Servizi</a>
+        </div>
+    </section>
+
+    <footer class="py-20 text-center bg-zinc-950 border-t border-zinc-800">
+        <p class="text-zinc-500 uppercase tracking-widest text-[10px]">Real Hair Yeah — Milano © 2026</p>
+    </footer>
+
+</body>
+</html>

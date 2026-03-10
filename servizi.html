@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Listino | Real Hair Yeah</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@900&family=Space+Grotesk:wght@300;400;700&display=swap" rel="stylesheet">
+    <style>
+        h1, h2, h3 { font-family: 'Montserrat', sans-serif; font-weight: 900; }
+        body { font-family: 'Space Grotesk', sans-serif; }
+        .price-item { border-bottom: 1px dashed rgba(255,255,255,0.2); padding: 12px 0; }
+        .bg-man { background: linear-gradient(to bottom, rgba(0,0,0,0.4) 0%, rgba(0,0,0,0.2) 50%, rgba(0,0,0,0.8) 100%), url('https://images.unsplash.com/photo-1585747860715-2ba37e788b70?q=80&w=1200'); background-size: cover; background-position: center; }
+        .bg-woman { background: linear-gradient(to bottom, rgba(0,0,0,0.8) 0%, rgba(0,0,0,0.1) 50%, rgba(0,0,0,0.9) 100%), url('https://images.unsplash.com/photo-1560066984-138dadb4c035?q=80&w=1200'); background-size: cover; background-position: center; }
+        .shadow-hard { text-shadow: 3px 3px 0px rgba(0,0,0,1); }
+    </style>
+</head>
+<body class="bg-black text-white min-h-screen">
+
+    <header class="fixed top-0 w-full z-50 p-6 flex justify-between items-center bg-black/40 backdrop-blur-md">
+        <a href="index.html" class="text-sm font-bold uppercase tracking-widest border-b border-white hover:text-yellow-400 hover:border-yellow-400 transition pb-1">← Home</a>
+        <div class="text-xl italic font-black uppercase tracking-tighter">Real Hair <span class="text-yellow-400">Yeah.</span></div>
+        <a href="prenota.html" class="bg-yellow-400 text-black px-6 py-2 font-black uppercase text-xs hover:bg-white transition">Prenota</a>
+    </header>
+
+    <main class="flex flex-col md:flex-row min-h-screen pt-20">
+        
+        <div class="w-full md:w-1/2 bg-man p-8 md:p-16 border-b md:border-b-0 md:border-r border-white/10 flex flex-col justify-between">
+            <h2 class="text-6xl md:text-8xl uppercase mb-8 text-yellow-400 shadow-hard leading-none">Man<br>Cutz</h2>
+            
+            <div class="space-y-2 mt-auto">
+                <div class="price-item flex justify-between items-center">
+                    <span>Taglio Base (Solo Macchinetta)</span>
+                    <span class="font-bold text-yellow-400">20€</span>
+                </div>
+                <div class="price-item flex justify-between items-center">
+                    <span>Taglio Real (Forbice + Sfumatura)</span>
+                    <span class="font-bold text-yellow-400">30€</span>
+                </div>
+                <div class="price-item flex justify-between items-center">
+                    <span>Taglio + Shampoo + Styling</span>
+                    <span class="font-bold text-yellow-400">35€</span>
+                </div>
+                <div class="price-item flex justify-between items-center">
+                    <span>Barba Express (Rifinitura)</span>
+                    <span class="font-bold text-yellow-400">15€</span>
+                </div>
+                <div class="price-item flex justify-between items-center">
+                    <span>Barba Ritual (Panno Caldo)</span>
+                    <span class="font-bold text-yellow-400">25€</span>
+                </div>
+                <div class="price-item flex justify-between items-center">
+                    <span>Combo Yeah (Taglio + Barba)</span>
+                    <span class="font-bold text-yellow-400">50€</span>
+                </div>
+                <div class="price-item flex justify-between items-center">
+                    <span>Colore Uomo / Camouflage</span>
+                    <span class="font-bold text-yellow-400">35€</span>
+                </div>
+                <div class="price-item flex justify-between items-center" style="border-bottom: none;">
+                    <span>Trattamento Cute Energizzante</span>
+                    <span class="font-bold text-yellow-400">20€</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="w-full md:w-1/2 bg-woman p-8 md:p-16 flex flex-col justify-between">
+            <h2 class="text-6xl md:text-8xl uppercase mb-8 text-yellow-400 shadow-hard leading-none">Woman<br>Salon</h2>
+            
+            <div class="space-y-2 mt-auto">
+                <div class="price-item flex justify-between items-center">
+                    <span>Piega Styling Pro</span>
+                    <span class="font-bold text-yellow-400">35€</span>
+                </div>
+                <div class="price-item flex justify-between items-center">
+                    <span>Taglio + Piega</span>
+                    <span class="font-bold text-yellow-400">65€</span>
+                </div>
+                <div class="price-item flex justify-between items-center">
+                    <span>Colore Base (Ritocco)</span>
+                    <span class="font-bold text-yellow-400">45€</span>
+                </div>
+                <div class="price-item flex justify-between items-center">
+                    <span>Colore Totale</span>
+                    <span class="font-bold text-yellow-400">60€</span>
+                </div>
+                <div class="price-item flex justify-between items-center">
+                    <span>Balayage / Effetti Luce</span>
+                    <span class="font-bold text-yellow-400">Da 90€</span>
+                </div>
+                <div class="price-item flex justify-between items-center">
+                    <span>Trattamento Hair Botox</span>
+                    <span class="font-bold text-yellow-400">60€</span>
+                </div>
+                <div class="price-item flex justify-between items-center">
+                    <span>Trattamento Cheratina (Lisciato)</span>
+                    <span class="font-bold text-yellow-400">Da 120€</span>
+                </div>
+                <div class="price-item flex justify-between items-center" style="border-bottom: none;">
+                    <span>Ricostruzione Profonda Plex</span>
+                    <span class="font-bold text-yellow-400">40€</span>
+                </div>
+            </div>
+            <p class="mt-8 text-[10px] uppercase tracking-widest text-zinc-400">I prezzi per schiariture e cheratina variano in base alla massa.</p>
+        </div>
+        
+    </main>
+
+</body>
+</html>

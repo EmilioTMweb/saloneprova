@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Panel | Real Hair Yeah</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Space Grotesk', sans-serif; background: #09090b; color: #d4d4d8; }
+        input, select { background: #18181b !important; border: 1px solid #27272a !important; color: white !important; font-size: 12px !important; outline: none; }
+        input:focus, select:focus { border-color: #facc15 !important; }
+        .btn-yellow { background: #facc15; color: black; font-weight: 900; text-transform: uppercase; font-size: 10px; padding: 10px; border-radius: 8px; transition: all 0.2s; }
+        .btn-yellow:hover { background: white; transform: translateY(-1px); }
+        .date-card { border: 1px solid rgba(255,255,255,0.05); border-radius: 12px; margin-bottom: 12px; overflow: hidden; }
+        .date-header { background: rgba(24, 24, 27, 0.5); padding: 12px 16px; cursor: pointer; display: flex; justify-content: space-between; align-items: center; }
+        .date-header:hover { background: rgba(39, 39, 42, 0.5); }
+    </style>
+</head>
+<body class="p-4 md:p-8">
+    <div class="max-w-7xl mx-auto">
+        <header class="flex justify-between items-center mb-10 border-b border-white/10 pb-5">
+            <h1 class="text-xl font-bold uppercase tracking-tighter text-yellow-400">Control Room <span class="text-white italic">Yeah.</span></h1>
+            <a href="index.html" class="text-[10px] bg-zinc-800 px-4 py-2 rounded font-bold uppercase tracking-widest hover:bg-white hover:text-black transition">Esci al Sito</a>
+        </header>
+
+        <div class="grid grid-cols-1 lg:grid-cols-4 gap-8">
+            
+            <div class="lg:col-span-2 space-y-4">
+                <h2 class="text-[10px] font-black uppercase text-zinc-500 tracking-[0.3em] mb-4">Agenda Appuntamenti</h2>
+                <div id="agenda-container">
+                    <p class="text-zinc-700 italic text-sm">Caricamento...</p>
+                </div>
+            </div>
+
+            <div class="space-y-6">
+                <div class="bg-zinc-900/60 p-5 rounded-2xl border border-yellow-400/20">
+                    <h3 class="text-[10px] font-black uppercase text-yellow-400 mb-4 tracking-widest text-center">Prenotazione Telefonica</h3>
+                    <div class="space-y-3">
+                        <input type="text" id="m-name" placeholder="Nome Cliente" class="w-full p-3 rounded-lg">
+                        <input type="tel" id="m-phone" placeholder="Numero di Telefono" class="w-full p-3 rounded-lg">
+                        <select id="m-service" class="w-full p-3 rounded-lg">
+                            <option value="">Caricamento servizi...</option>
+                        </select>
+                        <div class="grid grid-cols-2 gap-2">
+                            <input type="date" id="m-date" class="p-3 rounded-lg">
+                            <select id="m-time" class="p-3 rounded-lg">
+                                <option value="08:00">08:00</option><option value="08:30">08:30</option>
+                                <option value="09:00">09:00</option><option value="09:30">09:30</option>
+                                <option value="10:00">10:00</option><option value="10:30">10:30</option>
+                                <option value="11:00">11:00</option><option value="11:30">11:30</option>
+                                <option value="15:00">15:00</option><option value="15:30">15:30</option>
+                                <option value="16:00">16:00</option><option value="16:30">16:30</option>
+                                <option value="17:00">17:00</option><option value="17:30">17:30</option>
+                                <option value="18:00">18:00</option><option value="18:30">18:30</option>
+                                <option value="19:00">19:00</option><option value="19:30">19:30</option>
+                            </select>
+                        </div>
+                        <button onclick="insertManual()" class="btn-yellow w-full mt-2">Inserisci in Agenda</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="space-y-6">
+                <div class="bg-zinc-900/40 p-5 rounded-2xl border border-red-900/20">
+                    <h3 class="text-[10px] font-black uppercase text-red-500 mb-4 tracking-widest text-center">Chiusure Straordinarie</h3>
+                    <input type="date" id="block-date" class="w-full p-3 rounded-lg mb-3">
+                    <div class="grid grid-cols-1 gap-2">
+                        <button onclick="blockDay()" class="w-full bg-red-900/10 text-red-500 text-[10px] py-3 rounded font-bold border border-red-900/30 uppercase">Blocca Giorno</button>
+                        <button onclick="blockWeek()" class="w-full bg-red-600 text-white text-[10px] py-3 rounded font-black uppercase">Blocca 7 Giorni</button>
+                    </div>
+                    <p class="text-[8px] text-zinc-600 mt-3 italic uppercase text-center leading-tight">* Parte dal giorno scelto e blocca i 7 successivi.</p>
+                </div>
+                
+                <div>
+                    <h3 class="text-[10px] font-black uppercase text-zinc-500 tracking-widest mb-4">Giorni Chiusi</h3>
+                    <div id="blocked-list" class="space-y-2"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const SUB_URL = "https://gvvyesewhmnixbshhlyq.supabase.co";
+        const SUB_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imd2dnllc2V3aG1uaXhic2hobHlxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzMxNTQwMTksImV4cCI6MjA4ODczMDAxOX0.PUi3o4EB3gWz1W5SaAP6Jgr6YQcybeJahoIy5-BiQaw";
+        const _supabase = window.supabase.createClient(SUB_URL, SUB_KEY);
+
+        async function init() {
+            const { data: appts } = await _supabase.from('appointments').select('*, services(*)').order('appointment_date').order('start_time');
+            const { data: blocked } = await _supabase.from('blocked_days').select('*').order('day');
+            const { data: services } = await _supabase.from('services').select('*').order('name');
+            
+            renderAgenda(appts || []);
+            renderBlocked(blocked || []);
+            populateServices(services || []);
+        }
+
+        function populateServices(services) {
+            const sel = document.getElementById('m-service');
+            sel.innerHTML = '<option value="">Quale servizio?</option>';
+            services.forEach(s => {
+                sel.innerHTML += `<option value="${s.id}" data-gender="${s.category}">${s.name} (${s.category})</option>`;
+            });
+        }
+
+        async function insertManual() {
+            const sel = document.getElementById('m-service');
+            if(!sel.value) return alert("Scegli un servizio!");
+            
+            const payload = {
+                customer_name: document.getElementById('m-name').value,
+                customer_phone: document.getElementById('m-phone').value,
+                service_id: sel.value,
+                appointment_date: document.getElementById('m-date').value,
+                start_time: document.getElementById('m-time').value,
+                gender: sel.options[sel.selectedIndex].dataset.gender
+            };
+            
+            const { error } = await _supabase.from('appointments').insert([payload]);
+            if(error) alert("Errore nell'inserimento!"); else { alert("Appuntamento inserito!"); init(); }
+        }
+
+        function renderAgenda(data) {
+            const container = document.getElementById('agenda-container');
+            if(!data.length) { container.innerHTML = '<p class="text-zinc-800 text-sm">Nessuna prenotazione attiva.</p>'; return; }
+            
+            const groups = data.reduce((acc, curr) => { (acc[curr.appointment_date] = acc[curr.appointment_date] || []).push(curr); return acc; }, {});
+            
+            container.innerHTML = Object.keys(groups).map(date => {
+                const man = groups[date].filter(a => a.gender === 'uomo');
+                const woman = groups[date].filter(a => a.gender === 'donna');
+                
+                return `
+                <div class="date-card">
+                    <div onclick="document.getElementById('details-${date}').classList.toggle('hidden')" class="date-header">
+                        <span class="text-xs font-black uppercase text-white">${new Date(date).toLocaleDateString('it-IT', {weekday:'long', day:'2-digit', month:'short'})}</span>
+                        <div class="flex gap-2">
+                            <span class="text-[9px] bg-zinc-800 px-2 py-1 rounded">M: ${man.length}</span>
+                            <span class="text-[9px] bg-yellow-400/20 text-yellow-400 px-2 py-1 rounded">D: ${woman.length}</span>
+                        </div>
+                    </div>
+                    <div id="details-${date}" class="hidden p-4 bg-zinc-900/20 border-t border-white/5">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                            <div>
+                                <h4 class="text-[9px] font-black uppercase text-zinc-500 mb-4 border-b border-white/5 pb-1">Man Cutz</h4>
+                                ${renderCol(man)}
+                            </div>
+                            <div>
+                                <h4 class="text-[9px] font-black uppercase text-yellow-600 mb-4 border-b border-white/5 pb-1">Woman Salon</h4>
+                                ${renderCol(woman)}
+                            </div>
+                        </div>
+                    </div>
+                </div>`;
+            }).join('');
+        }
+
+        function renderCol(appts) {
+            return appts.length ? appts.map(a => `
+                <div class="flex justify-between items-center py-2 border-b border-white/5 last:border-0">
+                    <div>
+                        <span class="font-bold text-yellow-400 text-[11px] mr-2">${a.start_time.substring(0,5)}</span>
+                        <span class="uppercase text-white font-bold text-[10px]">${a.customer_name}</span>
+                        <p class="text-[8px] text-zinc-600 italic leading-none">${a.services?.name || ''}</p>
+                    </div>
+                    <div class="flex gap-3">
+                        <a href="tel:${a.customer_phone}" class="text-[10px]">📞</a>
+                        <button onclick="deleteAppt('${a.id}')" class="text-red-900 text-[10px]">✕</button>
+                    </div>
+                </div>
+            `).join('') : '<p class="text-[9px] text-zinc-800 italic">Vuoto</p>';
+        }
+
+        async function blockDay() { const d = document.getElementById('block-date').value; if(d) await _supabase.from('blocked_days').insert([{day:d}]); init(); }
+        async function blockWeek() {
+            const start = document.getElementById('block-date').value; if(!start) return;
+            let d = new Date(start); let batch = [];
+            for(let i=0; i<7; i++) { batch.push({ day: d.toISOString().split('T')[0] }); d.setDate(d.getDate()+1); }
+            await _supabase.from('blocked_days').insert(batch); init();
+        }
+        function renderBlocked(data) {
+            document.getElementById('blocked-list').innerHTML = data.map(d => `
+                <div class="flex justify-between items-center bg-zinc-900 p-3 rounded-lg border border-red-900/10">
+                    <span class="text-[10px] font-bold">${d.day}</span>
+                    <button onclick="unblock('${d.id}')" class="text-red-500 text-[9px] font-bold uppercase">Sblocca</button>
+                </div>
+            `).join('');
+        }
+        async function unblock(id) { await _supabase.from('blocked_days').delete().eq('id', id); init(); }
+        async function deleteAppt(id) { if(confirm("Cancellare?")) { await _supabase.from('appointments').delete().eq('id', id); init(); } }
+        init();
+    </script>
+</body>
+</html>

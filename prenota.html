@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prenota | Real Hair Yeah</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/themes/dark.css">
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;700&display=swap" rel="stylesheet">
+    <style>body { font-family: 'Space Grotesk', sans-serif; background: black; color: white; }
+    .slot-busy { background: #ef4444; opacity: 0.2; pointer-events: none; border: 1px solid #ef4444; }
+    .slot-free { border: 1px solid #22c55e; color: #22c55e; }
+    .slot-btn.active { background: #facc15 !important; color: black !important; }</style>
+</head>
+<body class="min-h-screen pb-20">
+    <nav class="p-6 border-b border-white/10 flex justify-between items-center bg-black/90 sticky top-0 z-50">
+        <a href="index.html" class="text-[10px] font-bold uppercase">← Home</a>
+        <div class="text-xl italic font-black uppercase text-yellow-400 tracking-tighter">Real Hair Yeah.</div>
+        <div class="w-10"></div>
+    </nav>
+    <main class="max-w-xl mx-auto p-6">
+        <div id="step-1" class="text-center mt-6">
+            <div class="grid grid-cols-2 gap-4">
+                <button onclick="loadServices('uomo')" id="btn-uomo" class="border-2 border-white/5 p-8 rounded-2xl flex flex-col items-center"><span class="font-black uppercase text-sm">Man Cutz</span></button>
+                <button onclick="loadServices('donna')" id="btn-donna" class="border-2 border-white/5 p-8 rounded-2xl flex flex-col items-center"><span class="font-black uppercase text-sm">Woman Salon</span></button>
+            </div>
+        </div>
+        <div id="step-2" class="mt-12 hidden"><select id="service-list" onchange="initCalendar()" class="w-full bg-zinc-900 border border-white/10 p-4 rounded-xl font-bold text-white outline-none"></select></div>
+        <div id="step-3" class="mt-12 hidden text-center"><input type="text" id="date-picker" class="w-full bg-zinc-900 border border-white/10 p-4 rounded-xl text-center font-bold mb-6"><div id="slots-container" class="grid grid-cols-3 gap-2 hidden"></div></div>
+        <div id="step-4" class="mt-12 hidden space-y-3">
+            <input type="text" id="cust-name" placeholder="Nome" class="w-full bg-zinc-900 border border-white/10 p-4 rounded-xl">
+            <input type="tel" id="cust-phone" placeholder="Cellulare" class="w-full bg-zinc-900 border border-white/10 p-4 rounded-xl">
+            <button onclick="submitBooking()" class="w-full bg-yellow-400 text-black p-5 rounded-xl font-black uppercase text-sm">Prenota Ora</button>
+        </div>
+    </main>
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <script>
+        const SUB_URL = "https://gvvyesewhmnixbshhlyq.supabase.co";
+        const SUB_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imd2dnllc2V3aG1uaXhic2hobHlxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzMxNTQwMTksImV4cCI6MjA4ODczMDAxOX0.PUi3o4EB3gWz1W5SaAP6Jgr6YQcybeJahoIy5-BiQaw";
+        const _supabase = window.supabase.createClient(SUB_URL, SUB_KEY);
+        let bookingData = { gender: '', service_id: '', date: '', time: '', duration: 30 };
+        let blockedDays = [];
+        async function loadServices(gender) {
+            bookingData.gender = gender; const { data } = await _supabase.from('services').select('*').eq('category', gender);
+            const { data: bData } = await _supabase.from('blocked_days').select('day');
+            blockedDays = (bData || []).map(x => x.day);
+            const select = document.getElementById('service-list');
+            select.innerHTML = '<option value="">Scegli servizio...</option>';
+            data.forEach(s => { select.innerHTML += `<option value="${s.id}" data-dur="${s.duration_minutes}">${s.name} (${s.price}€)</option>`; });
+            document.getElementById('step-2').classList.remove('hidden');
+        }
+        function initCalendar() {
+            const sel = document.getElementById('service-list');
+            bookingData.service_id = sel.value; bookingData.duration = parseInt(sel.options[sel.selectedIndex].dataset.dur);
+            document.getElementById('step-3').classList.remove('hidden');
+            flatpickr("#date-picker", {
+                inline: true, minDate: "today", dateFormat: "Y-m-d",
+                disable: [ d => (d.getDay() === 0) || blockedDays.includes(d.toISOString().split('T')[0]) ],
+                onChange: async (dates, str) => {
+                    bookingData.date = str;
+                    const { data } = await _supabase.from('appointments').select('start_time, services(duration_minutes)').eq('appointment_date', str);
+                    renderSlots(data || []);
+                }
+            });
+        }
+        function renderSlots(existingAppts) {
+            const container = document.getElementById('slots-container'); container.innerHTML = ''; container.classList.remove('hidden');
+            const times = ["08:00", "08:30", "09:00", "09:30", "10:00", "10:30", "11:00", "11:30", "15:00", "15:30", "16:00", "16:30", "17:00", "17:30", "18:00", "18:30", "19:00", "19:30"];
+            let busyMins = [];
+            existingAppts.forEach(a => {
+                let [h, m] = a.start_time.split(':').map(Number); let s = h * 60 + m;
+                for(let i=0; i < (a.services?.duration_minutes || 30); i+=30) busyMins.push(s + i);
+            });
+            const needed = bookingData.duration / 30;
+            times.forEach(t => {
+                let [h, m] = t.split(':').map(Number); let s = h * 60 + m; let isBusy = false;
+                for(let i=0; i < needed; i++) {
+                    let check = s + (i * 30);
+                    let checkStr = Math.floor(check/60).toString().padStart(2,'0') + ":" + (check%60).toString().padStart(2,'0');
+                    if (!times.includes(checkStr) || busyMins.includes(check)) { isBusy = true; break; }
+                }
+                let b = document.createElement('button');
+                b.className = `slot-btn p-3 rounded-lg text-[10px] font-black ${isBusy ? 'slot-busy' : 'slot-free'}`;
+                b.innerText = t;
+                b.onclick = () => {
+                    if(isBusy) return;
+                    bookingData.time = t;
+                    document.querySelectorAll('.slot-btn').forEach(el => el.classList.remove('active'));
+                    b.classList.add('active');
+                    document.getElementById('step-4').classList.remove('hidden');
+                };
+                container.appendChild(b);
+            });
+        }
+        async function submitBooking() {
+            await _supabase.from('appointments').insert([{
+                customer_name: document.getElementById('cust-name').value, customer_phone: document.getElementById('cust-phone').value,
+                service_id: bookingData.service_id, appointment_date: bookingData.date, start_time: bookingData.time, gender: bookingData.gender
+            }]); alert("PRENOTATO!"); window.location.href="index.html";
+        }
+    </script>
+</body>
+</html>
