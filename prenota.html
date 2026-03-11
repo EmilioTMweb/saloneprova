@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Prenota | Real Hair Yeah</title>
+    <link rel="icon" type="image/png" href="favicon.png">
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
@@ -95,8 +96,16 @@
             });
         }
         async function submitBooking() {
+            const name = document.getElementById('cust-name').value;
+            const phone = document.getElementById('cust-phone').value;
+            
+            if (name.trim().length < 3 || phone.trim() === '') {
+                alert("Errore: Il nome deve avere almeno 3 caratteri e il telefono è obbligatorio.");
+                return;
+            }
+
             await _supabase.from('appointments').insert([{
-                customer_name: document.getElementById('cust-name').value, customer_phone: document.getElementById('cust-phone').value,
+                customer_name: name, customer_phone: phone,
                 service_id: bookingData.service_id, appointment_date: bookingData.date, start_time: bookingData.time, gender: bookingData.gender
             }]); alert("PRENOTATO!"); window.location.href="index.html";
         }
