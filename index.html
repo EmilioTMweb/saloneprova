@@ -1,64 +1,111 @@
 <!DOCTYPE html>
 <html lang="it">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Real Hair Yeah | Man & Woman</title>
     <link rel="icon" type="image/png" href="favicon.png">
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@900&family=Inter:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@900&family=Inter:wght@400;700&display=swap"
+        rel="stylesheet">
     <style>
-        h1, h2 { font-family: 'Montserrat', sans-serif; font-weight: 900; }
-        body { font-family: 'Inter', sans-serif; }
-        .text-stroke { -webkit-text-stroke: 1px #facc15; color: transparent; }
+        h1,
+        h2 {
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 900;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+
+        .text-stroke {
+            -webkit-text-stroke: 1px #facc15;
+            color: transparent;
+        }
+
+        /* Animazione per i tasti */
+        .btn-hover:hover {
+            transform: translateY(-2px);
+        }
     </style>
 </head>
+
 <body class="bg-black text-white">
 
-    <nav class="py-3 px-5 flex justify-between items-center fixed w-full bg-black/90 backdrop-blur-md z-50 border-b border-white/10">
-        <div class="flex items-center gap-3">
-            <div class="text-xl italic font-black uppercase tracking-tighter">Real Hair <span class="text-yellow-400">Yeah.</span></div>
-            <span class="text-[9px] text-zinc-500 font-bold uppercase tracking-[0.2em] hidden md:inline-block border-l border-white/20 pl-3">Aperti Lun-Sab <br> <span class="text-red-500">Domenica Chiusi</span></span>
+    <nav
+        class="py-3 px-4 flex justify-between items-center fixed w-full bg-black/90 backdrop-blur-md z-50 border-b border-white/10">
+        <div class="flex items-center gap-2">
+            <div class="text-lg italic font-black uppercase tracking-tighter">Real Hair <span
+                    class="text-yellow-400">Yeah.</span></div>
         </div>
-        <div class="flex gap-3 items-center">
-            <a href="tel:+39123456789" class="w-9 h-9 rounded-full bg-green-500 flex items-center justify-center text-white text-sm hover:bg-green-400 transition shadow-lg shadow-green-500/30" title="Chiama">📞</a>
-            <a href="servizi.html" class="text-[10px] font-bold uppercase tracking-widest hover:text-yellow-400 transition">Listino</a>
-            <a href="prenota.html?action=new" 
-               class="bg-yellow-400 text-black px-4 py-2 rounded-xl font-black uppercase text-[10px] tracking-tighter hover:bg-white hover:scale-105 transition-all text-center">
+        <div class="flex gap-2 items-center">
+            <a href="tel:+39123456789"
+                class="w-8 h-8 rounded-full bg-green-500 flex items-center justify-center text-white text-xs hover:bg-green-400 transition"
+                title="Chiama">📞</a>
+            <a href="prenota.html?action=new"
+                class="bg-yellow-400 text-black px-4 py-2 rounded-lg font-black uppercase text-[10px] tracking-tighter hover:bg-white transition-all">
                 Prenota
-            </a>
-            <a href="prenota.html?action=list" 
-               class="bg-zinc-900 text-white border border-white/10 px-3 py-2 rounded-xl font-bold uppercase text-[9px] tracking-wider hover:border-yellow-400/50 transition-all text-center hidden sm:inline-block">
-                I Miei Appuntamenti
             </a>
         </div>
     </nav>
 
     <section class="relative min-h-screen flex items-center overflow-hidden border-b border-zinc-800">
         <div class="absolute inset-0 z-0">
-            <img src="https://images.unsplash.com/photo-1503951914875-452162b0f3f1?auto=format&fit=crop&q=80&w=1600" class="w-full h-full object-cover opacity-60">
+            <img src="https://images.unsplash.com/photo-1503951914875-452162b0f3f1?auto=format&fit=crop&q=80&w=1600"
+                class="w-full h-full object-cover opacity-60">
         </div>
-        <div class="relative z-10 p-10 md:p-20">
-            <h2 class="text-7xl md:text-9xl uppercase leading-none mb-4">Man<br><span class="text-stroke">Cutz</span></h2>
-            <p class="max-w-md text-zinc-300 mb-8 text-lg font-light">Tagli old school, sfumature moderne e trattamento barba con panno caldo.</p>
-            <a href="servizi.html" class="border-2 border-yellow-400 text-yellow-400 px-8 py-4 font-black uppercase hover:bg-yellow-400 hover:text-black transition inline-block">Scopri i Servizi</a>
+        <div class="relative z-10 p-6 md:p-20 mt-10">
+            <h2 class="text-6xl md:text-9xl uppercase leading-none mb-4">Man<br><span class="text-stroke">Cutz</span>
+            </h2>
+            <p class="max-w-md text-zinc-300 mb-8 text-base md:text-lg font-light">Tagli old school, sfumature moderne e
+                trattamento barba con panno caldo.</p>
+
+            <div class="flex flex-col sm:flex-row gap-4">
+                <a href="prenota.html?action=new"
+                    class="bg-yellow-400 text-black px-8 py-4 rounded-xl font-black uppercase text-sm text-center btn-hover transition-all">
+                    Prenota Ora
+                </a>
+                <a href="prenota.html?action=list"
+                    class="bg-zinc-900/80 backdrop-blur-sm text-white border border-white/20 px-8 py-4 rounded-xl font-bold uppercase text-[11px] tracking-widest text-center btn-hover transition-all">
+                    I Miei Appuntamenti
+                </a>
+            </div>
         </div>
     </section>
 
     <section class="relative min-h-screen flex items-center overflow-hidden">
         <div class="absolute inset-0 z-0">
-            <img src="https://images.unsplash.com/photo-1560066984-138dadb4c035?auto=format&fit=crop&q=80&w=1600" class="w-full h-full object-cover opacity-60">
+            <img src="https://images.unsplash.com/photo-1560066984-138dadb4c035?auto=format&fit=crop&q=80&w=1600"
+                class="w-full h-full object-cover opacity-60">
         </div>
-        <div class="relative z-10 p-10 md:p-20 text-right w-full flex flex-col items-end">
-            <h2 class="text-7xl md:text-9xl uppercase leading-none mb-4 text-yellow-400">Woman<br><span class="text-stroke">Salon</span></h2>
-            <p class="max-w-md text-zinc-300 mb-8 text-lg font-light">Colori vibranti, pieghe Red Carpet e trattamenti alla cheratina per capelli che non passano inosservati.</p>
-            <a href="servizi.html" class="bg-yellow-400 text-black px-8 py-4 font-black uppercase hover:bg-white transition inline-block">Scopri i Servizi</a>
+        <div class="relative z-10 p-6 md:p-20 text-right w-full flex flex-col items-end mt-10">
+            <h2 class="text-6xl md:text-9xl uppercase leading-none mb-4 text-yellow-400">Woman<br><span
+                    class="text-stroke">Salon</span></h2>
+            <p class="max-w-md text-zinc-300 mb-8 text-base md:text-lg font-light">Colori vibranti, pieghe Red Carpet e
+                trattamenti alla cheratina per capelli che non passano inosservati.</p>
+
+            <div class="flex flex-col sm:flex-row gap-4 w-full sm:w-auto">
+                <a href="prenota.html?action=list"
+                    class="order-2 sm:order-1 bg-zinc-900/80 backdrop-blur-sm text-white border border-white/20 px-8 py-4 rounded-xl font-bold uppercase text-[11px] tracking-widest text-center btn-hover transition-all">
+                    I Miei Appuntamenti
+                </a>
+                <a href="prenota.html?action=new"
+                    class="order-1 sm:order-2 bg-yellow-400 text-black px-8 py-4 rounded-xl font-black uppercase text-sm text-center btn-hover transition-all">
+                    Prenota Ora
+                </a>
+            </div>
         </div>
     </section>
 
-    <footer class="py-20 text-center bg-zinc-950 border-t border-zinc-800">
-        <p class="text-zinc-500 uppercase tracking-widest text-[10px]">Real Hair Yeah — Milano © 2026</p>
+    <footer class="py-16 text-center bg-zinc-950 border-t border-zinc-800">
+        <a href="servizi.html"
+            class="text-yellow-400 font-bold uppercase text-xs tracking-[0.3em] hover:text-white transition">Vedi
+            Listino Completo</a>
+        <p class="text-zinc-600 uppercase tracking-widest text-[9px] mt-8">Real Hair Yeah — Milano © 2026</p>
     </footer>
 
 </body>
+
 </html>
