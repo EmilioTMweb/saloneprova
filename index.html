@@ -25,7 +25,6 @@
             color: transparent;
         }
 
-        /* Animazione per i tasti */
         .btn-hover:hover {
             transform: translateY(-2px);
         }
@@ -35,15 +34,20 @@
 <body class="bg-black text-white">
 
     <nav
-        class="py-3 px-4 flex justify-between items-center fixed w-full bg-black/90 backdrop-blur-md z-50 border-b border-white/10">
-        <div class="flex items-center gap-2">
+        class="py-3 px-3 md:px-6 flex justify-between items-center fixed w-full bg-black/90 backdrop-blur-md z-50 border-b border-white/10">
+        <div class="flex items-center">
             <div class="text-lg italic font-black uppercase tracking-tighter">Real Hair <span
                     class="text-yellow-400">Yeah.</span></div>
         </div>
-        <div class="flex gap-2 items-center">
+
+        <div class="flex gap-4 items-center">
             <a href="tel:+39123456789"
-                class="w-8 h-8 rounded-full bg-green-500 flex items-center justify-center text-white text-xs hover:bg-green-400 transition"
+                class="w-8 h-8 rounded-full bg-green-500 flex items-center justify-center text-white text-xs hover:bg-green-400 transition shadow-lg shadow-green-500/20"
                 title="Chiama">📞</a>
+
+            <a href="servizi.html"
+                class="text-[10px] font-bold uppercase tracking-widest hover:text-yellow-400 transition">Servizi</a>
+
             <a href="prenota.html?action=new"
                 class="bg-yellow-400 text-black px-4 py-2 rounded-lg font-black uppercase text-[10px] tracking-tighter hover:bg-white transition-all">
                 Prenota
@@ -100,10 +104,7 @@
     </section>
 
     <footer class="py-16 text-center bg-zinc-950 border-t border-zinc-800">
-        <a href="servizi.html"
-            class="text-yellow-400 font-bold uppercase text-xs tracking-[0.3em] hover:text-white transition">Vedi
-            Listino Completo</a>
-        <p class="text-zinc-600 uppercase tracking-widest text-[9px] mt-8">Real Hair Yeah — Milano © 2026</p>
+        <p class="text-zinc-600 uppercase tracking-widest text-[9px]">Real Hair Yeah — Milano © 2026</p>
     </footer>
 
 </body>
