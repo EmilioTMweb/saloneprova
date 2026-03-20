@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="it">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -10,55 +11,174 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/themes/dark.css">
     <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;700&display=swap" rel="stylesheet">
-    <style>body { font-family: 'Space Grotesk', sans-serif; background: black; color: white; }
-    .slot-busy { background: #ef4444; opacity: 0.2; pointer-events: none; border: 1px solid #ef4444; }
-    .slot-free { border: 1px solid #22c55e; color: #22c55e; }
-    .slot-btn.active { background: #facc15 !important; color: black !important; }</style>
+    <style>
+        body {
+            font-family: 'Space Grotesk', sans-serif;
+            background: black;
+            color: white;
+        }
+
+        .slot-busy {
+            background: #ef4444;
+            opacity: 0.2;
+            pointer-events: none;
+            border: 1px solid #ef4444;
+        }
+
+        .slot-free {
+            border: 1px solid #22c55e;
+            color: #22c55e;
+        }
+
+        .slot-btn.active {
+            background: #facc15 !important;
+            color: black !important;
+        }
+
+        input::-webkit-outer-spin-button,
+        input::-webkit-inner-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+    </style>
 </head>
+
 <body class="min-h-screen pb-20">
-    <nav class="p-6 border-b border-white/10 flex justify-between items-center bg-black/90 sticky top-0 z-50">
+    <nav class="py-3 px-5 border-b border-white/10 flex justify-between items-center bg-black/90 sticky top-0 z-50">
         <a href="index.html" class="text-[10px] font-bold uppercase">← Home</a>
-        <div class="text-xl italic font-black uppercase text-yellow-400 tracking-tighter">Real Hair Yeah.</div>
-        <div class="w-10"></div>
+        <div class="text-lg italic font-black uppercase text-yellow-400 tracking-tighter">Real Hair Yeah.</div>
+        <div class="flex gap-3 items-center">
+            <a href="tel:+39123456789" class="w-9 h-9 rounded-full bg-green-500 flex items-center justify-center text-white text-sm hover:bg-green-400 transition shadow-lg shadow-green-500/30" title="Chiama">📞</a>
+            <div id="user-display" class="text-[9px] text-zinc-500 uppercase font-bold"></div>
+        </div>
     </nav>
+
     <main class="max-w-xl mx-auto p-6">
-        <div id="step-1" class="text-center mt-6">
-            <div class="grid grid-cols-2 gap-4">
-                <button onclick="loadServices('uomo')" id="btn-uomo" class="border-2 border-white/5 p-8 rounded-2xl flex flex-col items-center"><span class="font-black uppercase text-sm">Man Cutz</span></button>
-                <button onclick="loadServices('donna')" id="btn-donna" class="border-2 border-white/5 p-8 rounded-2xl flex flex-col items-center"><span class="font-black uppercase text-sm">Woman Salon</span></button>
+        <div id="auth-section" class="mt-10 space-y-6">
+            <div class="text-center mb-8">
+                <h2 class="text-2xl font-black uppercase">Accedi per Prenotare</h2>
+                <p class="text-zinc-400 text-xs mt-2 uppercase tracking-widest">Accedi per vedere i tuoi appuntamenti</p>
+            </div>
+            <div class="space-y-4">
+                <div class="relative">
+                    <span class="absolute left-4 top-4 text-zinc-500 font-bold">+39</span>
+                    <input type="tel" id="login-phone" placeholder="333 1234567"
+                        class="w-full bg-zinc-900 border border-white/10 p-4 pl-14 rounded-xl font-bold outline-none focus:border-yellow-400">
+                </div>
+                <input type="password" id="login-pin" maxlength="4" placeholder="PIN a 4 cifre"
+                    class="w-full bg-zinc-900 border border-white/10 p-4 rounded-xl font-bold text-center tracking-[1em] outline-none focus:border-yellow-400">
+                <button onclick="handleAuth()"
+                    class="w-full bg-white text-black p-5 rounded-xl font-black uppercase text-sm">Entra /
+                    Registrati</button>
+                <p class="text-center text-zinc-500 text-[11px] mt-2">Pin dimenticato? <a href="tel:+39123456789" class="text-green-400 hover:text-green-300 transition">📞 Chiama il salone</a></p>
             </div>
         </div>
-        <div id="step-2" class="mt-12 hidden"><select id="service-list" onchange="initCalendar()" class="w-full bg-zinc-900 border border-white/10 p-4 rounded-xl font-bold text-white outline-none"></select></div>
-        <div id="step-3" class="mt-12 hidden text-center"><input type="text" id="date-picker" class="w-full bg-zinc-900 border border-white/10 p-4 rounded-xl text-center font-bold mb-6"><div id="slots-container" class="grid grid-cols-3 gap-2 hidden"></div></div>
-        <div id="step-4" class="mt-12 hidden space-y-3">
-            <input type="text" id="cust-name" placeholder="Nome" class="w-full bg-zinc-900 border border-white/10 p-4 rounded-xl">
-            <input type="tel" id="cust-phone" placeholder="Cellulare" class="w-full bg-zinc-900 border border-white/10 p-4 rounded-xl">
-            <button onclick="submitBooking()" class="w-full bg-yellow-400 text-black p-5 rounded-xl font-black uppercase text-sm">Prenota Ora</button>
+
+        <div id="booking-flow" class="hidden">
+            <div id="step-1" class="text-center mt-6">
+                <h2 class="text-xl font-black uppercase mb-6 text-yellow-400">Prenota</h2>
+                <div class="grid grid-cols-2 gap-4">
+                    <button onclick="loadServices('uomo')"
+                        class="border-2 border-white/10 p-8 rounded-2xl flex flex-col items-center hover:border-yellow-400 transition"><span
+                            class="font-black uppercase text-sm">Man Cut</span></button>
+                    <button onclick="loadServices('donna')"
+                        class="border-2 border-white/10 p-8 rounded-2xl flex flex-col items-center hover:border-yellow-400 transition"><span
+                            class="font-black uppercase text-sm">Woman Salon</span></button>
+                </div>
+            </div>
+
+            <div id="step-2" class="mt-8 hidden">
+                <select id="service-list" onchange="initCalendar()"
+                    class="w-full bg-zinc-900 border border-white/10 p-4 rounded-xl font-bold text-white outline-none"></select>
+            </div>
+
+            <div id="step-3" class="mt-8 hidden text-center">
+                <input type="text" id="date-picker"
+                    class="w-full bg-zinc-900 border border-white/10 p-4 rounded-xl text-center font-bold mb-6">
+                <div id="slots-container" class="grid grid-cols-3 gap-2 hidden"></div>
+            </div>
+
+            <div id="step-4" class="mt-8 hidden space-y-3">
+                <input type="text" id="cust-name" placeholder="Inserisci il tuo Nome e Cognome"
+                    class="w-full bg-zinc-900 border border-white/10 p-4 rounded-xl">
+                <button onclick="submitBooking()"
+                    class="w-full bg-yellow-400 text-black p-5 rounded-xl font-black uppercase text-sm">Conferma
+                    Appuntamento</button>
+            </div>
+
+            <div id="my-appointments" class="mt-16 border-t border-white/10 pt-8">
+                <h3 class="text-lg font-black uppercase text-white tracking-wide mb-6 text-center">I Miei Appuntamenti</h3>
+                <div id="user-appts-list" class="space-y-3"></div>
+            </div>
         </div>
     </main>
+
     <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
     <script>
+        // CREDENZIALI INTEGRATE
         const SUB_URL = "https://gvvyesewhmnixbshhlyq.supabase.co";
         const SUB_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imd2dnllc2V3aG1uaXhic2hobHlxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzMxNTQwMTksImV4cCI6MjA4ODczMDAxOX0.PUi3o4EB3gWz1W5SaAP6Jgr6YQcybeJahoIy5-BiQaw";
         const _supabase = window.supabase.createClient(SUB_URL, SUB_KEY);
+
+        let currentUser = null;
         let bookingData = { gender: '', service_id: '', date: '', time: '', duration: 30 };
         let blockedDays = [];
+
+        async function handleAuth() {
+            let phoneInput = document.getElementById('login-phone').value.trim();
+            const pin = document.getElementById('login-pin').value;
+
+            if (!phoneInput.startsWith('+39')) phoneInput = '+39' + phoneInput;
+            if (phoneInput.length < 13 || pin.length !== 4) return alert("Inserisci un numero valido e un PIN di 4 cifre.");
+
+            let { data: user, error } = await _supabase.from('clients').select('*').eq('phone', phoneInput).single();
+
+            if (user) {
+                if (user.pin === pin) {
+                    loginSuccess(user);
+                } else {
+                    alert("PIN Errato!");
+                }
+            } else {
+                const { data: newUser, error: regError } = await _supabase.from('clients').insert([{ phone: phoneInput, pin: pin }]).select().single();
+                if (regError) alert("Errore creazione profilo");
+                else {
+                    alert("Registrazione effettuata con successo! Segnati il PIN");
+                    loginSuccess(newUser);
+                }
+            }
+        }
+
+        function loginSuccess(user) {
+            currentUser = user;
+            document.getElementById('auth-section').classList.add('hidden');
+            document.getElementById('booking-flow').classList.remove('hidden');
+            document.getElementById('user-display').innerText = user.phone;
+            if (user.full_name) document.getElementById('cust-name').value = user.full_name;
+            fetchUserAppointments();
+        }
+
         async function loadServices(gender) {
-            bookingData.gender = gender; const { data } = await _supabase.from('services').select('*').eq('category', gender);
+            bookingData.gender = gender;
+            const { data } = await _supabase.from('services').select('*').eq('category', gender);
             const { data: bData } = await _supabase.from('blocked_days').select('day');
             blockedDays = (bData || []).map(x => x.day);
+
             const select = document.getElementById('service-list');
-            select.innerHTML = '<option value="">Scegli servizio...</option>';
+            select.innerHTML = '<option value="">Quale servizio?</option>';
             data.forEach(s => { select.innerHTML += `<option value="${s.id}" data-dur="${s.duration_minutes}">${s.name} (${s.price}€)</option>`; });
             document.getElementById('step-2').classList.remove('hidden');
         }
+
         function initCalendar() {
             const sel = document.getElementById('service-list');
-            bookingData.service_id = sel.value; bookingData.duration = parseInt(sel.options[sel.selectedIndex].dataset.dur);
+            bookingData.service_id = sel.value;
+            bookingData.duration = parseInt(sel.options[sel.selectedIndex].dataset.dur);
             document.getElementById('step-3').classList.remove('hidden');
+
             flatpickr("#date-picker", {
                 inline: true, minDate: "today", dateFormat: "Y-m-d",
-                disable: [ d => (d.getDay() === 0) || blockedDays.includes(d.toISOString().split('T')[0]) ],
+                disable: [d => (d.getDay() === 0) || blockedDays.includes(d.toISOString().split('T')[0])],
                 onChange: async (dates, str) => {
                     bookingData.date = str;
                     const { data } = await _supabase.from('appointments').select('start_time, services(duration_minutes)').eq('appointment_date', str);
@@ -66,27 +186,30 @@
                 }
             });
         }
+
         function renderSlots(existingAppts) {
-            const container = document.getElementById('slots-container'); container.innerHTML = ''; container.classList.remove('hidden');
+            const container = document.getElementById('slots-container');
+            container.innerHTML = '';
+            container.classList.remove('hidden');
             const times = ["08:00", "08:30", "09:00", "09:30", "10:00", "10:30", "11:00", "11:30", "15:00", "15:30", "16:00", "16:30", "17:00", "17:30", "18:00", "18:30", "19:00", "19:30"];
+
             let busyMins = [];
             existingAppts.forEach(a => {
-                let [h, m] = a.start_time.split(':').map(Number); let s = h * 60 + m;
-                for(let i=0; i < (a.services?.duration_minutes || 30); i+=30) busyMins.push(s + i);
+                let [h, m] = a.start_time.split(':').map(Number);
+                let s = h * 60 + m;
+                for (let i = 0; i < (a.services?.duration_minutes || 30); i += 30) busyMins.push(s + i);
             });
-            const needed = bookingData.duration / 30;
+
             times.forEach(t => {
-                let [h, m] = t.split(':').map(Number); let s = h * 60 + m; let isBusy = false;
-                for(let i=0; i < needed; i++) {
-                    let check = s + (i * 30);
-                    let checkStr = Math.floor(check/60).toString().padStart(2,'0') + ":" + (check%60).toString().padStart(2,'0');
-                    if (!times.includes(checkStr) || busyMins.includes(check)) { isBusy = true; break; }
-                }
+                let [h, m] = t.split(':').map(Number);
+                let s = h * 60 + m;
+                let isBusy = busyMins.includes(s);
+
                 let b = document.createElement('button');
                 b.className = `slot-btn p-3 rounded-lg text-[10px] font-black ${isBusy ? 'slot-busy' : 'slot-free'}`;
                 b.innerText = t;
                 b.onclick = () => {
-                    if(isBusy) return;
+                    if (isBusy) return;
                     bookingData.time = t;
                     document.querySelectorAll('.slot-btn').forEach(el => el.classList.remove('active'));
                     b.classList.add('active');
@@ -95,20 +218,59 @@
                 container.appendChild(b);
             });
         }
+
         async function submitBooking() {
-            const name = document.getElementById('cust-name').value;
-            const phone = document.getElementById('cust-phone').value;
-            
-            if (name.trim().length < 3 || phone.trim() === '') {
-                alert("Errore: Il nome deve avere almeno 3 caratteri e il telefono è obbligatorio.");
-                return;
+            const name = document.getElementById('cust-name').value.trim();
+            if (name.length < 3) return alert("Inserisci il tuo nome e cognome.");
+
+            if (!currentUser.full_name) {
+                await _supabase.from('clients').update({ full_name: name }).eq('id', currentUser.id);
             }
 
-            await _supabase.from('appointments').insert([{
-                customer_name: name, customer_phone: phone,
-                service_id: bookingData.service_id, appointment_date: bookingData.date, start_time: bookingData.time, gender: bookingData.gender
-            }]); alert("PRENOTATO!"); window.location.href="index.html";
+            const { error } = await _supabase.from('appointments').insert([{
+                customer_name: name,
+                customer_phone: currentUser.phone,
+                client_id: currentUser.id,
+                service_id: bookingData.service_id,
+                appointment_date: bookingData.date,
+                start_time: bookingData.time,
+                gender: bookingData.gender
+            }]);
+
+            if (!error) { alert("PRENOTATO!"); location.reload(); }
+        }
+
+        async function fetchUserAppointments() {
+            const { data } = await _supabase.from('appointments').select('*, services(name)').eq('client_id', currentUser.id).gte('appointment_date', new Date().toISOString().split('T')[0]).order('appointment_date');
+            const container = document.getElementById('user-appts-list');
+
+            if (!data || !data.length) { container.innerHTML = '<p class="text-zinc-700 italic text-[10px] text-center">Nessun appuntamento attivo.</p>'; return; }
+
+            const today = new Date().toISOString().split('T')[0];
+            container.innerHTML = data.map(a => {
+                const isToday = a.appointment_date === today;
+                return `
+                <div class="bg-zinc-900 p-4 rounded-xl border border-white/5 flex justify-between items-center">
+                    <div>
+                        <p class="text-[10px] font-black text-yellow-400 uppercase">${new Date(a.appointment_date).toLocaleDateString('it-IT', { day: '2-digit', month: 'short' })} @ ${a.start_time.substring(0, 5)}</p>
+                        <p class="text-xs font-bold uppercase">${a.services?.name || 'Servizio'}</p>
+                    </div>
+                    ${isToday
+                        ? `<a href="tel:+39123456789" class="text-[9px] bg-red-900/20 text-red-500 px-3 py-2 rounded-lg font-bold uppercase">Chiama per disdire</a>`
+                        : `<button onclick="deleteAppt('${a.id}')" class="text-[9px] bg-zinc-800 text-white px-3 py-2 rounded-lg font-bold uppercase hover:bg-red-600 transition">Cancella</button>`
+                    }
+                </div>
+                `;
+            }).join('');
+        }
+
+        async function deleteAppt(id) {
+            if (confirm("Vuoi cancellare questa prenotazione?")) {
+                await _supabase.from('appointments').delete().eq('id', id);
+                fetchUserAppointments();
+            }
         }
     </script>
 </body>
+
 </html>

@@ -15,14 +15,22 @@
 </head>
 <body class="bg-black text-white">
 
-    <nav class="p-6 flex justify-between items-center fixed w-full bg-black/90 backdrop-blur-md z-50 border-b border-white/10">
-        <div class="flex items-center gap-4">
-            <div class="text-2xl italic font-black uppercase tracking-tighter">Real Hair <span class="text-yellow-400">Yeah.</span></div>
-            <span class="text-[9px] text-zinc-500 font-bold uppercase tracking-[0.2em] hidden md:inline-block border-l border-white/20 pl-4">Aperti Lun-Sab <br> <span class="text-red-500">Domenica Chiusi</span></span>
+    <nav class="py-3 px-5 flex justify-between items-center fixed w-full bg-black/90 backdrop-blur-md z-50 border-b border-white/10">
+        <div class="flex items-center gap-3">
+            <div class="text-xl italic font-black uppercase tracking-tighter">Real Hair <span class="text-yellow-400">Yeah.</span></div>
+            <span class="text-[9px] text-zinc-500 font-bold uppercase tracking-[0.2em] hidden md:inline-block border-l border-white/20 pl-3">Aperti Lun-Sab <br> <span class="text-red-500">Domenica Chiusi</span></span>
         </div>
-        <div class="flex gap-4 items-center">
+        <div class="flex gap-3 items-center">
+            <a href="tel:+39123456789" class="w-9 h-9 rounded-full bg-green-500 flex items-center justify-center text-white text-sm hover:bg-green-400 transition shadow-lg shadow-green-500/30" title="Chiama">📞</a>
             <a href="servizi.html" class="text-[10px] font-bold uppercase tracking-widest hover:text-yellow-400 transition">Listino</a>
-            <a href="prenota.html" class="bg-yellow-400 text-black px-6 py-2 font-black uppercase text-xs hover:invert transition">Prenota</a>
+            <a href="prenota.html?action=new" 
+               class="bg-yellow-400 text-black px-4 py-2 rounded-xl font-black uppercase text-[10px] tracking-tighter hover:bg-white hover:scale-105 transition-all text-center">
+                Prenota
+            </a>
+            <a href="prenota.html?action=list" 
+               class="bg-zinc-900 text-white border border-white/10 px-3 py-2 rounded-xl font-bold uppercase text-[9px] tracking-wider hover:border-yellow-400/50 transition-all text-center hidden sm:inline-block">
+                I Miei Appuntamenti
+            </a>
         </div>
     </nav>
 

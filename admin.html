@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="it">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -9,74 +10,169 @@
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;700&display=swap" rel="stylesheet">
     <style>
-        body { font-family: 'Space Grotesk', sans-serif; background: #09090b; color: #d4d4d8; }
-        input, select { background: #18181b !important; border: 1px solid #27272a !important; color: white !important; font-size: 12px !important; outline: none; }
-        input:focus, select:focus { border-color: #facc15 !important; }
-        .btn-yellow { background: #facc15; color: black; font-weight: 900; text-transform: uppercase; font-size: 10px; padding: 10px; border-radius: 8px; transition: all 0.2s; }
-        .btn-yellow:hover { background: white; transform: translateY(-1px); }
-        .date-card { border: 1px solid rgba(255,255,255,0.05); border-radius: 12px; margin-bottom: 12px; overflow: hidden; }
-        .date-header { background: rgba(24, 24, 27, 0.5); padding: 12px 16px; cursor: pointer; display: flex; justify-content: space-between; align-items: center; }
-        .date-header:hover { background: rgba(39, 39, 42, 0.5); }
+        body {
+            font-family: 'Space Grotesk', sans-serif;
+            background: #09090b;
+            color: #d4d4d8;
+        }
+
+        input,
+        select {
+            background: #18181b !important;
+            border: 1px solid #27272a !important;
+            color: white !important;
+            font-size: 12px !important;
+            outline: none;
+        }
+
+        input:focus,
+        select:focus {
+            border-color: #facc15 !important;
+        }
+
+        .btn-yellow {
+            background: #facc15;
+            color: black;
+            font-weight: 900;
+            text-transform: uppercase;
+            font-size: 10px;
+            padding: 10px;
+            border-radius: 8px;
+            transition: all 0.2s;
+        }
+
+        .btn-yellow:hover {
+            background: white;
+            transform: translateY(-1px);
+        }
+
+        .date-card {
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 12px;
+            margin-bottom: 12px;
+            overflow: hidden;
+        }
+
+        .today-card {
+            border: 2px solid #facc15 !important;
+            background: rgba(250, 204, 21, 0.05);
+        }
+
+        .date-header {
+            background: rgba(24, 24, 27, 0.5);
+            padding: 12px 16px;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
     </style>
 </head>
+
 <body class="p-4 md:p-8">
     <div class="max-w-7xl mx-auto">
         <header class="flex justify-between items-center mb-10 border-b border-white/10 pb-5">
-            <h1 class="text-xl font-bold uppercase tracking-tighter text-yellow-400">Control Room <span class="text-white italic">Yeah.</span></h1>
-            <a href="index.html" class="text-[10px] bg-zinc-800 px-4 py-2 rounded font-bold uppercase tracking-widest hover:bg-white hover:text-black transition">Esci al Sito</a>
+            <h1 class="text-xl font-bold uppercase tracking-tighter text-yellow-400">Control Room <span
+                    class="text-white italic">Yeah.</span></h1>
+            <a href="index.html"
+                class="text-[10px] bg-zinc-800 px-4 py-2 rounded font-bold uppercase tracking-widest hover:bg-white hover:text-black transition">Esci</a>
         </header>
 
         <div class="grid grid-cols-1 lg:grid-cols-4 gap-8">
-            
-            <div class="lg:col-span-2 space-y-4">
-                <h2 class="text-[10px] font-black uppercase text-zinc-500 tracking-[0.3em] mb-4">Agenda Appuntamenti</h2>
-                <div id="agenda-container">
-                    <p class="text-zinc-700 italic text-sm">Caricamento...</p>
+
+            <div class="lg:col-span-2 space-y-6">
+                <div>
+                    <h2 class="text-[10px] font-black uppercase text-yellow-400 tracking-[0.3em] mb-4">In Salone Oggi
+                    </h2>
+                    <div id="today-container"></div>
+                </div>
+                <div>
+                    <h2 class="text-[10px] font-black uppercase text-zinc-500 tracking-[0.3em] mb-4">Prossimi Giorni
+                    </h2>
+                    <div id="agenda-container"></div>
                 </div>
             </div>
 
             <div class="space-y-6">
                 <div class="bg-zinc-900/60 p-5 rounded-2xl border border-yellow-400/20">
-                    <h3 class="text-[10px] font-black uppercase text-yellow-400 mb-4 tracking-widest text-center">Prenotazione Telefonica</h3>
+                    <h3 class="text-[10px] font-black uppercase text-yellow-400 mb-4 tracking-widest text-center">Nuovo
+                        Appuntamento</h3>
                     <div class="space-y-3">
                         <input type="text" id="m-name" placeholder="Nome Cliente" class="w-full p-3 rounded-lg">
-                        <input type="tel" id="m-phone" placeholder="Numero di Telefono" class="w-full p-3 rounded-lg">
-                        <select id="m-service" class="w-full p-3 rounded-lg">
-                            <option value="">Caricamento servizi...</option>
-                        </select>
+                        <div class="relative">
+                            <span class="absolute left-3 top-3 text-[10px] text-zinc-500 font-bold">+39</span>
+                            <input type="tel" id="m-phone" placeholder="Telefono (Opzionale)"
+                                class="w-full p-3 pl-10 rounded-lg">
+                        </div>
+                        <select id="m-service" class="w-full p-3 rounded-lg"></select>
                         <div class="grid grid-cols-2 gap-2">
                             <input type="date" id="m-date" class="p-3 rounded-lg">
                             <select id="m-time" class="p-3 rounded-lg">
-                                <option value="08:00">08:00</option><option value="08:30">08:30</option>
-                                <option value="09:00">09:00</option><option value="09:30">09:30</option>
-                                <option value="10:00">10:00</option><option value="10:30">10:30</option>
-                                <option value="11:00">11:00</option><option value="11:30">11:30</option>
-                                <option value="15:00">15:00</option><option value="15:30">15:30</option>
-                                <option value="16:00">16:00</option><option value="16:30">16:30</option>
-                                <option value="17:00">17:00</option><option value="17:30">17:30</option>
-                                <option value="18:00">18:00</option><option value="18:30">18:30</option>
-                                <option value="19:00">19:00</option><option value="19:30">19:30</option>
+                                <option value="08:00">08:00</option>
+                                <option value="08:30">08:30</option>
+                                <option value="09:00">09:00</option>
+                                <option value="09:30">09:30</option>
+                                <option value="10:00">10:00</option>
+                                <option value="10:30">10:30</option>
+                                <option value="11:00">11:00</option>
+                                <option value="11:30">11:30</option>
+                                <option value="15:00">15:00</option>
+                                <option value="15:30">15:30</option>
+                                <option value="16:00">16:00</option>
+                                <option value="16:30">16:30</option>
+                                <option value="17:00">17:00</option>
+                                <option value="17:30">17:30</option>
+                                <option value="18:00">18:00</option>
+                                <option value="18:30">18:30</option>
+                                <option value="19:00">19:00</option>
+                                <option value="19:30">19:30</option>
                             </select>
                         </div>
-                        <button onclick="insertManual()" class="btn-yellow w-full mt-2">Inserisci in Agenda</button>
+                        <button onclick="insertManual()" class="btn-yellow w-full mt-2">Salva Appuntamento</button>
+                    </div>
+                </div>
+
+                <div class="bg-zinc-900/40 p-5 rounded-2xl border border-red-900/20">
+                    <h3 class="text-[10px] font-black uppercase text-red-500 mb-4 tracking-widest text-center">Chiusura
+                    </h3>
+                    <input type="date" id="block-date" class="w-full p-3 rounded-lg mb-3">
+                    <div class="space-y-2">
+                        <button onclick="blockDay()"
+                            class="w-full bg-red-900/10 text-red-500 text-[10px] py-3 rounded font-bold border border-red-900/30 uppercase hover:bg-red-900/20">Blocca
+                            Giorno</button>
+                        <button onclick="blockWeek()"
+                            class="w-full bg-red-600 text-white text-[10px] py-3 rounded font-black uppercase hover:bg-red-500">Blocca
+                            7 Giorni</button>
                     </div>
                 </div>
             </div>
 
             <div class="space-y-6">
-                <div class="bg-zinc-900/40 p-5 rounded-2xl border border-red-900/20">
-                    <h3 class="text-[10px] font-black uppercase text-red-500 mb-4 tracking-widest text-center">Chiusure Straordinarie</h3>
-                    <input type="date" id="block-date" class="w-full p-3 rounded-lg mb-3">
-                    <div class="grid grid-cols-1 gap-2">
-                        <button onclick="blockDay()" class="w-full bg-red-900/10 text-red-500 text-[10px] py-3 rounded font-bold border border-red-900/30 uppercase">Blocca Giorno</button>
-                        <button onclick="blockWeek()" class="w-full bg-red-600 text-white text-[10px] py-3 rounded font-black uppercase">Blocca 7 Giorni</button>
+                <div class="bg-zinc-900/40 p-5 rounded-2xl border border-blue-400/20">
+                    <h3 class="text-[10px] font-black uppercase text-blue-400 mb-4 tracking-widest text-center">Gestione
+                        Clienti & PIN</h3>
+                    <div class="space-y-3">
+                        <div class="relative">
+                            <span class="absolute left-3 top-3 text-[10px] text-zinc-500 font-bold">+39</span>
+                            <input type="tel" id="search-phone" placeholder="Cerca Numero"
+                                class="w-full p-3 pl-10 rounded-lg text-xs">
+                        </div>
+                        <button onclick="findClient()"
+                            class="w-full bg-zinc-800 text-white py-2 rounded font-bold text-[10px] uppercase">Cerca
+                            PIN</button>
                     </div>
-                    <p class="text-[8px] text-zinc-600 mt-3 italic uppercase text-center leading-tight">* Parte dal giorno scelto e blocca i 7 successivi.</p>
+                    <div id="search-result" class="mt-6 hidden space-y-4 border-t border-white/10 pt-4 text-center">
+                        <p id="res-name" class="text-xs font-black uppercase text-white"></p>
+                        <p id="res-pin" class="text-2xl font-black text-yellow-400 tracking-[0.5em] my-1"></p>
+                        <button onclick="resetPin()"
+                            class="w-full bg-red-900/20 text-red-500 py-3 rounded-lg font-black text-[9px] uppercase">Resetta
+                            a 0000</button>
+                    </div>
                 </div>
-                
                 <div>
-                    <h3 class="text-[10px] font-black uppercase text-zinc-500 tracking-widest mb-4">Giorni Chiusi</h3>
-                    <div id="blocked-list" class="space-y-2"></div>
+                    <h3 class="text-[10px] font-black uppercase text-zinc-500 tracking-widest mb-4">Top Clienti</h3>
+                    <div id="rank-men" class="space-y-2 mb-4"></div>
+                    <div id="rank-women" class="space-y-2"></div>
                 </div>
             </div>
         </div>
@@ -86,111 +182,110 @@
         const SUB_URL = "https://gvvyesewhmnixbshhlyq.supabase.co";
         const SUB_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imd2dnllc2V3aG1uaXhic2hobHlxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzMxNTQwMTksImV4cCI6MjA4ODczMDAxOX0.PUi3o4EB3gWz1W5SaAP6Jgr6YQcybeJahoIy5-BiQaw";
         const _supabase = window.supabase.createClient(SUB_URL, SUB_KEY);
+        let currentFoundClient = null;
 
         async function init() {
             const { data: appts } = await _supabase.from('appointments').select('*, services(*)').order('appointment_date').order('start_time');
-            const { data: blocked } = await _supabase.from('blocked_days').select('*').order('day');
             const { data: services } = await _supabase.from('services').select('*').order('name');
-            
             renderAgenda(appts || []);
-            renderBlocked(blocked || []);
+            renderRanking(appts || []);
             populateServices(services || []);
         }
 
-        function populateServices(services) {
-            const sel = document.getElementById('m-service');
-            sel.innerHTML = '<option value="">Quale servizio?</option>';
-            services.forEach(s => {
-                sel.innerHTML += `<option value="${s.id}" data-gender="${s.category}">${s.name} (${s.category})</option>`;
-            });
+        async function blockWeek() {
+            const start = document.getElementById('block-date').value;
+            if (!start) return alert("Scegli una data di inizio!");
+            let d = new Date(start); let batch = [];
+            for (let i = 0; i < 7; i++) {
+                batch.push({ day: d.toISOString().split('T')[0] });
+                d.setDate(d.getDate() + 1);
+            }
+            const { error } = await _supabase.from('blocked_days').insert(batch);
+            if (error) alert("Errore nel blocco!"); else { alert("Settimana bloccata!"); location.reload(); }
+        }
+
+        async function blockDay() {
+            const d = document.getElementById('block-date').value;
+            if (!d) return alert("Scegli una data!");
+            const { error } = await _supabase.from('blocked_days').insert([{ day: d }]);
+            if (error) alert("Errore!"); else location.reload();
+        }
+
+        async function findClient() {
+            let phone = document.getElementById('search-phone').value.trim();
+            if (!phone.startsWith('+39')) phone = '+39' + phone;
+            const { data } = await _supabase.from('clients').select('*').eq('phone', phone).single();
+            const resDiv = document.getElementById('search-result');
+            if (data) { currentFoundClient = data; resDiv.classList.remove('hidden'); document.getElementById('res-name').innerText = data.full_name || 'No Name'; document.getElementById('res-pin').innerText = data.pin; }
+            else { alert("Non trovato."); resDiv.classList.add('hidden'); }
+        }
+
+        async function resetPin() {
+            if (!currentFoundClient) return;
+            if (confirm(`Resettare PIN di ${currentFoundClient.phone}?`)) {
+                await _supabase.from('clients').update({ pin: '0000' }).eq('id', currentFoundClient.id);
+                alert("Resettato!"); document.getElementById('res-pin').innerText = '0000';
+            }
         }
 
         async function insertManual() {
             const sel = document.getElementById('m-service');
-            if(!sel.value) return alert("Scegli un servizio!");
-            
-            const payload = {
-                customer_name: document.getElementById('m-name').value,
-                customer_phone: document.getElementById('m-phone').value,
-                service_id: sel.value,
-                appointment_date: document.getElementById('m-date').value,
-                start_time: document.getElementById('m-time').value,
-                gender: sel.options[sel.selectedIndex].dataset.gender
-            };
-            
-            const { error } = await _supabase.from('appointments').insert([payload]);
-            if(error) alert("Errore nell'inserimento!"); else { alert("Appuntamento inserito!"); init(); }
+            let phone = document.getElementById('m-phone').value.trim();
+            const name = document.getElementById('m-name').value;
+            const date = document.getElementById('m-date').value;
+            const time = document.getElementById('m-time').value;
+            if (!sel.value || !name || !date) return alert("Compila i campi obbligatori!");
+            let clientID = null;
+            if (phone) { if (!phone.startsWith('+39')) phone = '+39' + phone; let { data: client } = await _supabase.from('clients').select('id').eq('phone', phone).single(); if (client) clientID = client.id; }
+            await _supabase.from('appointments').insert([{ customer_name: name, customer_phone: phone || 'TELEFONICO', client_id: clientID, service_id: sel.value, appointment_date: date, start_time: time, gender: sel.options[sel.selectedIndex].dataset.gender }]);
+            location.reload();
         }
 
         function renderAgenda(data) {
-            const container = document.getElementById('agenda-container');
-            if(!data.length) { container.innerHTML = '<p class="text-zinc-800 text-sm">Nessuna prenotazione attiva.</p>'; return; }
-            
+            const todayStr = new Date().toISOString().split('T')[0];
             const groups = data.reduce((acc, curr) => { (acc[curr.appointment_date] = acc[curr.appointment_date] || []).push(curr); return acc; }, {});
-            
-            container.innerHTML = Object.keys(groups).map(date => {
-                const man = groups[date].filter(a => a.gender === 'uomo');
-                const woman = groups[date].filter(a => a.gender === 'donna');
-                
-                return `
+            const todayData = groups[todayStr] || [];
+            document.getElementById('today-container').innerHTML = todayData.length ? `
+                <div class="date-card today-card p-4">
+                    <div class="grid grid-cols-2 gap-4">
+                        <div><h4 class="text-[9px] font-black text-zinc-500 mb-2 uppercase">Man</h4>${renderCol(todayData.filter(a => a.gender === 'uomo'))}</div>
+                        <div><h4 class="text-[9px] font-black text-yellow-600 mb-2 uppercase">Woman</h4>${renderCol(todayData.filter(a => a.gender === 'donna'))}</div>
+                    </div>
+                </div>` : '<p class="text-zinc-800 text-[10px] italic">Nulla per oggi.</p>';
+            document.getElementById('agenda-container').innerHTML = Object.keys(groups).filter(d => d !== todayStr).map(date => `
                 <div class="date-card">
                     <div onclick="document.getElementById('details-${date}').classList.toggle('hidden')" class="date-header">
-                        <span class="text-xs font-black uppercase text-white">${new Date(date).toLocaleDateString('it-IT', {weekday:'long', day:'2-digit', month:'short'})}</span>
-                        <div class="flex gap-2">
-                            <span class="text-[9px] bg-zinc-800 px-2 py-1 rounded">M: ${man.length}</span>
-                            <span class="text-[9px] bg-yellow-400/20 text-yellow-400 px-2 py-1 rounded">D: ${woman.length}</span>
-                        </div>
+                        <span class="text-[10px] font-bold uppercase text-white">${new Date(date).toLocaleDateString('it-IT', { day: '2-digit', month: 'short' })}</span>
+                        <span class="text-[8px] opacity-40">${groups[date].length} TAGLI</span>
                     </div>
-                    <div id="details-${date}" class="hidden p-4 bg-zinc-900/20 border-t border-white/5">
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-                            <div>
-                                <h4 class="text-[9px] font-black uppercase text-zinc-500 mb-4 border-b border-white/5 pb-1">Man Cutz</h4>
-                                ${renderCol(man)}
-                            </div>
-                            <div>
-                                <h4 class="text-[9px] font-black uppercase text-yellow-600 mb-4 border-b border-white/5 pb-1">Woman Salon</h4>
-                                ${renderCol(woman)}
-                            </div>
-                        </div>
-                    </div>
-                </div>`;
-            }).join('');
+                    <div id="details-${date}" class="hidden p-4 bg-zinc-900/10 border-t border-white/5"><div class="grid grid-cols-2 gap-4"><div>${renderCol(groups[date].filter(a => a.gender === 'uomo'))}</div><div>${renderCol(groups[date].filter(a => a.gender === 'donna'))}</div></div></div>
+                </div>`).join('');
         }
 
         function renderCol(appts) {
             return appts.length ? appts.map(a => `
                 <div class="flex justify-between items-center py-2 border-b border-white/5 last:border-0">
-                    <div>
-                        <span class="font-bold text-yellow-400 text-[11px] mr-2">${a.start_time.substring(0,5)}</span>
-                        <span class="uppercase text-white font-bold text-[10px]">${a.customer_name}</span>
-                        <p class="text-[8px] text-zinc-600 italic leading-none">${a.services?.name || ''}</p>
-                    </div>
-                    <div class="flex gap-3">
-                        <a href="tel:${a.customer_phone}" class="text-[10px]">📞</a>
-                        <button onclick="deleteAppt('${a.id}')" class="text-red-900 text-[10px]">✕</button>
-                    </div>
-                </div>
-            `).join('') : '<p class="text-[9px] text-zinc-800 italic">Vuoto</p>';
+                    <div><span class="font-black text-yellow-400 text-[10px] mr-1">${a.start_time.substring(0, 5)}</span><span class="uppercase text-white font-bold text-[10px]">${a.customer_name}</span></div>
+                    <button onclick="deleteAppt('${a.id}')" class="text-zinc-800 hover:text-red-500">✕</button>
+                </div>`).join('') : '<p class="text-[8px] text-zinc-900 italic">Vuoto</p>';
         }
 
-        async function blockDay() { const d = document.getElementById('block-date').value; if(d) await _supabase.from('blocked_days').insert([{day:d}]); init(); }
-        async function blockWeek() {
-            const start = document.getElementById('block-date').value; if(!start) return;
-            let d = new Date(start); let batch = [];
-            for(let i=0; i<7; i++) { batch.push({ day: d.toISOString().split('T')[0] }); d.setDate(d.getDate()+1); }
-            await _supabase.from('blocked_days').insert(batch); init();
+        function renderRanking(appts) {
+            const stats = appts.reduce((acc, curr) => { const k = curr.customer_name.toUpperCase(); if (!acc[k]) acc[k] = { count: 0, gender: curr.gender }; acc[k].count++; return acc; }, {});
+            const sorted = Object.entries(stats).sort((a, b) => b[1].count - a[1].count);
+            document.getElementById('rank-men').innerHTML = sorted.filter(s => s[1].gender === 'uomo').slice(0, 3).map(m => `<div class="bg-zinc-900/40 p-2 rounded flex justify-between"><span class="text-[9px] font-bold uppercase">${m[0]}</span><span class="text-yellow-400 font-black text-[9px]">${m[1].count}</span></div>`).join('');
+            document.getElementById('rank-women').innerHTML = sorted.filter(s => s[1].gender === 'donna').slice(0, 3).map(w => `<div class="bg-zinc-900/40 p-2 rounded border-l-2 border-yellow-400/20 flex justify-between"><span class="text-[9px] font-bold uppercase">${w[0]}</span><span class="text-yellow-400 font-black text-[9px]">${w[1].count}</span></div>`).join('');
         }
-        function renderBlocked(data) {
-            document.getElementById('blocked-list').innerHTML = data.map(d => `
-                <div class="flex justify-between items-center bg-zinc-900 p-3 rounded-lg border border-red-900/10">
-                    <span class="text-[10px] font-bold">${d.day}</span>
-                    <button onclick="unblock('${d.id}')" class="text-red-500 text-[9px] font-bold uppercase">Sblocca</button>
-                </div>
-            `).join('');
+
+        function populateServices(services) {
+            const sel = document.getElementById('m-service');
+            sel.innerHTML = '<option value="">Cosa?</option>';
+            services.forEach(s => { sel.innerHTML += `<option value="${s.id}" data-gender="${s.category}">${s.name}</option>`; });
         }
-        async function unblock(id) { await _supabase.from('blocked_days').delete().eq('id', id); init(); }
-        async function deleteAppt(id) { if(confirm("Cancellare?")) { await _supabase.from('appointments').delete().eq('id', id); init(); } }
+
+        async function deleteAppt(id) { if (confirm("Cancellare?")) { await _supabase.from('appointments').delete().eq('id', id); location.reload(); } }
         init();
     </script>
 </body>
+
 </html>
